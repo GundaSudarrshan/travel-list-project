@@ -30,6 +30,17 @@ function App() {
       )
     );
   }
+  function handleUpdateItem(id) {
+    console.log(id);
+    const updatedDescription = prompt(
+      "Update the item with appropriate change !"
+    );
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, description: updatedDescription } : item
+      )
+    );
+  }
 
   return (
     <div className="App">
@@ -40,6 +51,7 @@ function App() {
         setItems={setItems}
         onDeleteItem={handleDeleteItems}
         onToggleItem={handleToggleItems}
+        onUpdateItem={handleUpdateItem}
       />
       <Stats items={items} />
     </div>
@@ -97,7 +109,13 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem, setItems }) {
+function PackingList({
+  items,
+  onDeleteItem,
+  onUpdateItem,
+  onToggleItem,
+  setItems,
+}) {
   const [sortby, setSortBy] = useState("input");
 
   let sortedItems;
@@ -130,6 +148,7 @@ function PackingList({ items, onDeleteItem, onToggleItem, setItems }) {
             packed={item.packed}
             onDeleteItem={onDeleteItem}
             onToggleItem={onToggleItem}
+            onUpdateItem={onUpdateItem}
           />
         ))}
       </ul>
@@ -159,6 +178,8 @@ function Item(props) {
       <span style={props.packed ? { textDecoration: "line-through" } : {}}>
         {props.quantity} {props.description}
       </span>
+
+      <button onClick={() => props.onUpdateItem(props.id)}>🖊️</button>
       <button onClick={() => props.onDeleteItem(props.id)}>❌</button>
     </li>
   );
